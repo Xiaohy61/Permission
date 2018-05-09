@@ -1,0 +1,10 @@
+<resources>
+
+ >
+
+    <style name="appDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowEnterAnimation">@anim/dialog_window_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_window_out</item>
+    </style>
+</resources>
