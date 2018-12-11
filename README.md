@@ -20,7 +20,7 @@ allprojects {
 ```
 ``` xml
  dependencies {
-	        compile 'com.github.Xiaohy61:Permission:1.0.1'
+	        compile 'com.github.Xiaohy61:Permission:1.0.2'
 	}
 
 ```
