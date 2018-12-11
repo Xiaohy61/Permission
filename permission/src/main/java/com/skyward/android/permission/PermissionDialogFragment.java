@@ -124,6 +124,7 @@ public class PermissionDialogFragment extends DialogFragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mListener.onPermissionFailure(permissions);
                 dismiss();
             }
         });
