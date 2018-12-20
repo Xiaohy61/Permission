@@ -138,9 +138,7 @@ public class PermissionDialogFragment extends DialogFragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(permissions != null){
-                    mListener.onPermissionFailure(unGetPermissions);
-                }
+                mListener.onCancelClick();
                 dismiss();
             }
         });
@@ -210,6 +208,9 @@ public class PermissionDialogFragment extends DialogFragment {
                 if(mListener != null){
                     mListener.onPermissionSuccess();
                 }
+            }
+            if(mListener != null){
+                mListener.onPermissionFailure(unGetPermissions);
             }
             require = true;
         }

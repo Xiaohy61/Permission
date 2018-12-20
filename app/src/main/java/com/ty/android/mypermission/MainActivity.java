@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onPermissionFailure(String[] permission) {
                         Toast.makeText(MainActivity.this, "禁止权限", Toast.LENGTH_SHORT).show();
                     }
+
+                    @Override
+                    public void onCancelClick() {
+                        Toast.makeText(MainActivity.this, "点击取消按钮", Toast.LENGTH_SHORT).show();
+                    }
                 }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
 
@@ -52,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onPermissionFailure(String[] permission) {
                         Toast.makeText(MainActivity.this,"禁止权限",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelClick() {
+                        Toast.makeText(MainActivity.this, "点击取消按钮", Toast.LENGTH_SHORT).show();
                     }
                 }, Manifest.permission.CALL_PHONE,Manifest.permission.CAMERA);
             }

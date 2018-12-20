@@ -17,4 +17,9 @@ public interface OnPermissionListener {
      * @param permission 申请的权限
      */
     void onPermissionFailure(String[] permission);
+
+    /**
+     * 点击dialog取消回调
+     */
+    void onCancelClick();
 }
