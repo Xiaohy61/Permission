@@ -19,7 +19,7 @@ public interface OnPermissionListener {
     void onPermissionFailure(String[] permission);
 
     /**
-     * 点击dialog取消回调
+     * dialog取消回调
      */
     void onCancelClick();
 }
