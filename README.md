@@ -20,7 +20,7 @@ allprojects {
 ```
 ``` xml
  dependencies {
-	        implementation 'com.github.Xiaohy61:Permission:1.0.6'
+	        implementation 'com.github.Xiaohy61:Permission:1.0.7'
 	}
 
 ```
