@@ -20,7 +20,7 @@ allprojects {
 ```
 ``` xml
  dependencies {
-	        compile 'com.github.Xiaohy61:Permission:1.0.2'
+	        implementation 'com.github.Xiaohy61:Permission:1.0.4'
 	}
 
 ```
@@ -61,38 +61,64 @@ allprojects {
 public class RequestPermission {
 
 
-    public static void request(Context context, OnPermissionListener listener, String... permissions) {
+    public static void request(@NonNull Context context,@NonNull OnPermissionListener listener,@NonNull String... permissions) {
 
-	 //如果拥有权限，回调成功结果，缺少或者没有就去PermissionDialogFragment申请权限	
-        if(hasPermission(context,permissions)){
+
+        if (hasPermission(context, permissions)) {
             listener.onPermissionSuccess();
-        }else {
-	 
-            PermissionDialogFragment dialogFragment = PermissionDialogFragment.newInstance(permissions);
+
+        } else {
+
+            /**
+             * 未取得权限的数量统计
+             */
+            int count = 0;
+
+            for (String permission : permissions) {
+                if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    count++;
+                }
+            }
+            /**
+             * 把未取得权限的重新装箱去请求，目的：以防已请求过的权限多次请求
+             */
+            String[] unGetPermissions = new String[count];
+            int index = 0;
+
+            for (String permission : permissions) {
+                if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    unGetPermissions[index] = permission;
+                    index++;
+                }
+            }
+
+
+            PermissionDialogFragment dialogFragment = PermissionDialogFragment.newInstance(unGetPermissions);
             dialogFragment.onPermissionListener(listener);
+            dialogFragment.setActivityContext(context);
             dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "dialog");
+
+
         }
-
-
-
-
 
     }
 
     /**
      * 是否拥有了申请的权限
+     *
      * @param context
      * @param permissions
-     * @return boolean
+     * @return
      */
-    public static  boolean hasPermission(Context context,String... permissions){
-        for (String permission: permissions) {
-            if(PermissionChecker.checkSelfPermission(context,permission) != PackageManager.PERMISSION_GRANTED){
+    public static boolean hasPermission(Context context, String... permissions) {
+        for (String permission : permissions) {
+            if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }
         return true;
     }
+
 
 }
 ```
