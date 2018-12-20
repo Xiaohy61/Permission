@@ -44,28 +44,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+        RequestPermission.request(MainActivity.this, new OnPermissionListener() {
             @Override
-            public void onClick(View v) {
-
-                RequestPermission.request(MainActivity.this, new OnPermissionListener() {
-                    @Override
-                    public void onPermissionSuccess() {
-                        Toast.makeText(MainActivity.this,"取得权限",Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onPermissionFailure(String[] permission) {
-                        Toast.makeText(MainActivity.this,"禁止权限",Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onCancelClick() {
-                        Toast.makeText(MainActivity.this, "点击取消按钮", Toast.LENGTH_SHORT).show();
-                    }
-                }, Manifest.permission.CALL_PHONE,Manifest.permission.CAMERA);
+            public void onPermissionSuccess() {
+                Toast.makeText(MainActivity.this,"取得权限",Toast.LENGTH_SHORT).show();
             }
-        });
+
+            @Override
+            public void onPermissionFailure(String[] permission) {
+                Toast.makeText(MainActivity.this,"禁止权限",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelClick() {
+                Toast.makeText(MainActivity.this, "点击取消按钮", Toast.LENGTH_SHORT).show();
+            }
+        }, Manifest.permission.CALL_PHONE,Manifest.permission.CAMERA);
 
 
     }

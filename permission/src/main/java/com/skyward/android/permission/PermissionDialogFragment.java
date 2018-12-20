@@ -199,11 +199,14 @@ public class PermissionDialogFragment extends DialogFragment {
                 if(mListener != null){
                     mListener.onPermissionSuccess();
                 }
+            }else {
+                if(mListener != null){
+                    mListener.onPermissionFailure(unGetPermissions);
+                }
+                require = true;
             }
-            if(mListener != null){
-                mListener.onPermissionFailure(unGetPermissions);
-            }
-            require = true;
+
+
         }
 
     }
