@@ -20,7 +20,7 @@ allprojects {
 ```
 ``` xml
  dependencies {
-	        implementation 'com.github.Xiaohy61:Permission:1.0.4'
+	        implementation 'com.github.Xiaohy61:Permission:1.0.5'
 	}
 
 ```
@@ -32,18 +32,23 @@ allprojects {
  RequestPermission.request(MainActivity.this, new OnPermissionListener() {
                     @Override
                     public void onPermissionSuccess() {
-                        Toast.makeText(MainActivity.this,"取得权限",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "取得权限", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onPermissionFailure(String[] permission) {
-                        Toast.makeText(MainActivity.this,"禁止权限",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "禁止权限", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelClick() {
+                        Toast.makeText(MainActivity.this, "点击取消按钮", Toast.LENGTH_SHORT).show();
                     }
                 }, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 ```
 2.多个权限申请：
 ```xml
- RequestPermission.request(MainActivity.this, new OnPermissionListener() {
+   RequestPermission.request(MainActivity.this, new OnPermissionListener() {
                     @Override
                     public void onPermissionSuccess() {
                         Toast.makeText(MainActivity.this,"取得权限",Toast.LENGTH_SHORT).show();
@@ -52,6 +57,11 @@ allprojects {
                     @Override
                     public void onPermissionFailure(String[] permission) {
                         Toast.makeText(MainActivity.this,"禁止权限",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelClick() {
+                        Toast.makeText(MainActivity.this, "点击取消按钮", Toast.LENGTH_SHORT).show();
                     }
                 }, Manifest.permission.CALL_PHONE,Manifest.permission.CAMERA);
 ```
