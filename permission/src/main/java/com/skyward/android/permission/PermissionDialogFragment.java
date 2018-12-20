@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.PermissionChecker;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -39,13 +40,15 @@ public class PermissionDialogFragment extends DialogFragment {
 
 
     private static final int PERMISSION_REQUEST_CODE = 64;
-    private String[] permissions;
+    private String[] permissions = new String[1];
 
     private RelativeLayout tipLayout;
     private TextView btnCancel;
     private TextView btnSure;
     private OnPermissionListener mListener;
-    private boolean require;
+    private  boolean require = true;
+    String[] unGetPermissions;
+    private Context mContext;
 
     public PermissionDialogFragment() {
         // Required empty public constructor
@@ -57,7 +60,16 @@ public class PermissionDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putStringArray(PERMISSIONS, permissions);
         fragment.setArguments(args);
+
         return fragment;
+    }
+
+    /**'
+     *
+     * @param context 上下文
+     */
+    public void setActivityContext(Context context){
+        this.mContext = context;
     }
 
     @Override
@@ -116,7 +128,7 @@ public class PermissionDialogFragment extends DialogFragment {
 
 
     protected void initView(View view) {
-        require = true;
+
         tipLayout = view.findViewById(R.id.tip_layout);
         btnCancel = view.findViewById(R.id.btn_cancel);
         TextView tip = view.findViewById(R.id.tip_content2);
@@ -126,7 +138,9 @@ public class PermissionDialogFragment extends DialogFragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onPermissionFailure(permissions);
+                if(permissions != null){
+                    mListener.onPermissionFailure(unGetPermissions);
+                }
                 dismiss();
             }
         });
@@ -134,7 +148,7 @@ public class PermissionDialogFragment extends DialogFragment {
         btnSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoSetting(getActivity());
+                gotoSetting(mContext);
             }
         });
 
@@ -148,6 +162,7 @@ public class PermissionDialogFragment extends DialogFragment {
            }
        });
 
+
     }
 
 
@@ -157,21 +172,48 @@ public class PermissionDialogFragment extends DialogFragment {
         super.onResume();
 
 
+        int unGetPermissionCount = 0;
+
+        for (String permission : permissions) {
+            if (PermissionChecker.checkSelfPermission(mContext, permission) != PackageManager.PERMISSION_GRANTED) {
+                unGetPermissionCount++;
+            }
+        }
+
+        unGetPermissions = new String[unGetPermissionCount];
+        int index = 0;
+
+        for (String permission : permissions) {
+            if (PermissionChecker.checkSelfPermission(mContext, permission) != PackageManager.PERMISSION_GRANTED) {
+                unGetPermissions[index] = permission;
+                index++;
+            }
+        }
+
+
         //有些手机，比如小米，用户手动设置了允许权限，其实还没有真正获取到授权，要再次请求才可以获取到
         if (require) {
-            if (RequestPermission.hasPermission(getActivity(),permissions)) {
+            tipLayout.setVisibility(View.GONE);
+            if (RequestPermission.hasPermission(mContext, unGetPermissions)) {
                 dismiss();
+                if(mListener != null){
+                    mListener.onPermissionSuccess();
+                }
             } else {
                 //请求申请权限,这个方法会触发onResume
-                requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+                requestPermissions(unGetPermissions, PERMISSION_REQUEST_CODE);
                 require = false;
             }
         } else {
-            if (RequestPermission.hasPermission(getActivity(),permissions)) {
+            if (RequestPermission.hasPermission(mContext, unGetPermissions)) {
                 dismiss();
+                if(mListener != null){
+                    mListener.onPermissionSuccess();
+                }
             }
             require = true;
         }
+
     }
 
 
@@ -205,7 +247,7 @@ public class PermissionDialogFragment extends DialogFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if (requestCode == PERMISSION_REQUEST_CODE && isHasPermission(grantResults) && RequestPermission.hasPermission(getActivity(),permissions)) {
+        if (requestCode == PERMISSION_REQUEST_CODE && isHasPermission(grantResults) && RequestPermission.hasPermission(mContext,permissions)) {
             tipLayout.setVisibility(View.GONE);
             if(mListener != null){
                 mListener.onPermissionSuccess();

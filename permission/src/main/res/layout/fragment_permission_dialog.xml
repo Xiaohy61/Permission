@@ -18,7 +18,7 @@
             android:id="@+id/tip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="温馨提醒"
+            android:text="@string/permission_tip_title"
             android:textSize="16sp"
             android:textColor="@color/text_color"/>
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tip_title"
             android:layout_marginTop="5dp"
-            android:text="缺少必要的运行权限"
+            android:text="@string/permission_tip"
             android:textColor="@color/text_color"
             android:textSize="13sp"/>
         <TextView
@@ -47,7 +47,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tip_content2"
             android:layout_marginTop="15dp"
-            android:text="设置"
+            android:text="@string/permission_confirm"
             android:textColor="@color/toastErrorBackground"/>
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_alignTop="@+id/btn_sure"
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/btn_sure"
-            android:text="取消"
+            android:text="@string/permission_cancel"
             android:textColor="@color/toastErrorBackground"/>
     </RelativeLayout>
 

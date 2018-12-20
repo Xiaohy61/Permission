@@ -9,13 +9,15 @@ import android.widget.Toast;
 import com.skyward.android.permission.OnPermissionListener;
 import com.skyward.android.permission.RequestPermission;
 
+/**
+ * @author skyward
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 RequestPermission.request(MainActivity.this, new OnPermissionListener() {
                     @Override
                     public void onPermissionSuccess() {
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 }, Manifest.permission.CALL_PHONE,Manifest.permission.CAMERA);
             }
         });
+
+
     }
 
 
