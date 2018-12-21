@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/Xiaohy61/Permission.svg)](https://jitpack.io/#Xiaohy61/Permission)
-# 一段简单的代码 android 6.0动态权限适配工具
-用不习惯其他第三方的权限适配工具，空余时间，自己动手封装了一个简洁的权限适配工具
+# 一个优雅的 android 6.0动态权限适配工具
+
 效果图
 
 
