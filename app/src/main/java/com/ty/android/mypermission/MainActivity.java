@@ -10,7 +10,7 @@ import com.skyward.android.permission.OnPermissionListener;
 import com.skyward.android.permission.RequestPermission;
 
 /**
- * @author skyward
+ * @author skyward、Enlogty
  */
 public class MainActivity extends AppCompatActivity {
 
