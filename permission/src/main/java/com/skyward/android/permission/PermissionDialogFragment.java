@@ -2,6 +2,7 @@ package com.skyward.android.permission;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.PermissionChecker;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +76,12 @@ public class PermissionDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         getDialog().setCanceledOnTouchOutside(false);
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                return true;
+            }
+        });
         Window window = getDialog().getWindow();
         WindowManager.LayoutParams layoutParams = window.getAttributes();
         layoutParams.windowAnimations = R.style.appDialog;
