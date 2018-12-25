@@ -20,7 +20,7 @@ allprojects {
 ```
 ``` xml
  dependencies {
-	        implementation 'com.github.Xiaohy61:Permission:1.0.8'
+	        implementation 'com.github.Xiaohy61:Permission:1.0.9'
 	}
 
 ```
@@ -70,8 +70,9 @@ allprojects {
 ```xml
 public class RequestPermission {
 
+    public static boolean  isStartActivity;
 
-    public static void request(@NonNull Context context,@NonNull OnPermissionListener listener,@NonNull String... permissions) {
+    public static void request(@NonNull Context context, @NonNull OnPermissionListener listener, @NonNull String... permissions) {
 
 
         if (hasPermission(context, permissions)) {
@@ -79,34 +80,13 @@ public class RequestPermission {
 
         } else {
 
-            /**
-             * 未取得权限的数量统计
-             */
-            int count = 0;
-
-            for (String permission : permissions) {
-                if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    count++;
-                }
+            if(!isStartActivity){
+                Intent intent = new Intent(context,PermissionDialogActivity.class);
+                intent.putExtra("permissions", permissions);
+                PermissionDialogActivity.onPermissionListener(listener);
+                context.startActivity(intent);
+                isStartActivity = true;
             }
-            /**
-             * 把未取得权限的重新装箱去请求，目的：以防已请求过的权限多次请求
-             */
-            String[] unGetPermissions = new String[count];
-            int index = 0;
-
-            for (String permission : permissions) {
-                if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    unGetPermissions[index] = permission;
-                    index++;
-                }
-            }
-
-
-            PermissionDialogFragment dialogFragment = PermissionDialogFragment.newInstance(unGetPermissions);
-            dialogFragment.onPermissionListener(listener);
-            dialogFragment.setActivityContext(context);
-            dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "dialog");
 
 
         }
@@ -129,9 +109,9 @@ public class RequestPermission {
         return true;
     }
 
-
 }
+
 ```
-### PermissionDialogFragment ：
+### PermissionDialogActivity ：
 源码有详细说明，就不罗嗦了
 
