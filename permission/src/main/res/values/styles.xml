@@ -1,10 +1,14 @@
 <resources>
 
- >
-
-    <style name="appDialog" parent="android:style/Theme.Dialog">
-        <item name="android:windowNoTitle">true</item>
+    <style name="dialogActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@drawable/dialog_bg</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowIsFloating">true</item>
         <item name="android:windowEnterAnimation">@anim/dialog_window_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_window_out</item>
     </style>
+
 </resources>

@@ -1,9 +1,9 @@
 package com.skyward.android.permission;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.PermissionChecker;
 
 /**
@@ -13,8 +13,9 @@ import android.support.v4.content.PermissionChecker;
  */
 public class RequestPermission {
 
+    public static boolean  isStartActivity;
 
-    public static void request(@NonNull Context context,@NonNull OnPermissionListener listener,@NonNull String... permissions) {
+    public static void request(@NonNull Context context, @NonNull OnPermissionListener listener, @NonNull String... permissions) {
 
 
         if (hasPermission(context, permissions)) {
@@ -22,34 +23,13 @@ public class RequestPermission {
 
         } else {
 
-            /**
-             * 未取得权限的数量统计
-             */
-            int count = 0;
-
-            for (String permission : permissions) {
-                if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    count++;
-                }
+            if(!isStartActivity){
+                Intent intent = new Intent(context,PermissionDialogActivity.class);
+                intent.putExtra("permissions", permissions);
+                PermissionDialogActivity.onPermissionListener(listener);
+                context.startActivity(intent);
+                isStartActivity = true;
             }
-            /**
-             * 把未取得权限的重新装箱去请求，目的：以防已请求过的权限多次请求
-             */
-            String[] unGetPermissions = new String[count];
-            int index = 0;
-
-            for (String permission : permissions) {
-                if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    unGetPermissions[index] = permission;
-                    index++;
-                }
-            }
-
-
-            PermissionDialogFragment dialogFragment = PermissionDialogFragment.newInstance(unGetPermissions);
-            dialogFragment.onPermissionListener(listener);
-            dialogFragment.setActivityContext(context);
-            dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "dialog");
 
 
         }

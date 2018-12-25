@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.skyward.android.permission"/>
+          package="com.skyward.android.permission">
+
+
+    <application>
+
+        <activity android:name=".PermissionDialogActivity"
+                  android:theme="@style/dialogActivity"
+            />
+
+    </application>
+</manifest>
