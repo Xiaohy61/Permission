@@ -18,16 +18,16 @@ public class RequestPermission {
     public static void request(@NonNull Context context, @NonNull OnPermissionListener listener, @NonNull String... permissions) {
 
 
-        if (hasPermission(context, permissions)) {
+        if (hasPermission(context.getApplicationContext(), permissions)) {
             listener.onPermissionSuccess();
 
         } else {
 
             if(!isStartActivity){
-                Intent intent = new Intent(context,PermissionDialogActivity.class);
+                Intent intent = new Intent(context.getApplicationContext(),PermissionDialogActivity.class);
                 intent.putExtra("permissions", permissions);
                 PermissionDialogActivity.onPermissionListener(listener);
-                context.startActivity(intent);
+                context.getApplicationContext().startActivity(intent);
                 isStartActivity = true;
             }
 
