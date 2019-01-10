@@ -25,6 +25,7 @@ public class RequestPermission {
 
             if(!isStartActivity){
                 Intent intent = new Intent(context.getApplicationContext(),PermissionDialogActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("permissions", permissions);
                 PermissionDialogActivity.onPermissionListener(listener);
                 context.getApplicationContext().startActivity(intent);
