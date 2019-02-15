@@ -16,8 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-;
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -32,8 +31,6 @@ public class PermissionDialogActivity extends AppCompatActivity {
     private String[] permissions;
 
     private RelativeLayout tipLayout;
-    private TextView btnCancel;
-    private TextView btnSure;
     private static OnPermissionListener mListener;
     private boolean require = true;
     String[] unGetPermissions;
@@ -65,9 +62,9 @@ public class PermissionDialogActivity extends AppCompatActivity {
     protected void initView() {
 
         tipLayout = findViewById(R.id.tip_layout);
-        btnCancel = findViewById(R.id.btn_cancel);
+        TextView btnCancel = findViewById(R.id.btn_cancel);
         TextView tip = findViewById(R.id.tip_content2);
-        btnSure = findViewById(R.id.btn_sure);
+        TextView btnSure = findViewById(R.id.btn_sure);
         tip.setText("请点击：\"设置\"-\"权限\"-打开所需权限。");
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +120,7 @@ public class PermissionDialogActivity extends AppCompatActivity {
         //有些手机，比如小米，用户手动设置了允许权限，其实还没有真正获取到授权，要再次请求才可以获取到
         if (require) {
             tipLayout.setVisibility(View.GONE);
-            if (RequestPermission.hasPermission(this, unGetPermissions)) {
+            if (RequestPermission.hasPermission(new WeakReference<Context>(this), unGetPermissions)) {
                 finish();
                 if (mListener != null) {
                     mListener.onPermissionSuccess();
@@ -134,7 +131,7 @@ public class PermissionDialogActivity extends AppCompatActivity {
                 require = false;
             }
         } else {
-            if (RequestPermission.hasPermission(this, unGetPermissions)) {
+            if (RequestPermission.hasPermission(new WeakReference<Context>(this), unGetPermissions)) {
                 finish();
                 if (mListener != null) {
                     mListener.onPermissionSuccess();
@@ -167,24 +164,13 @@ public class PermissionDialogActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if (requestCode == PERMISSION_REQUEST_CODE && isHasPermission(grantResults) && RequestPermission.hasPermission(PermissionDialogActivity.this, permissions)) {
+        if (requestCode == PERMISSION_REQUEST_CODE && isHasPermission(grantResults) && RequestPermission.hasPermission(new WeakReference<Context>(this), permissions)) {
             tipLayout.setVisibility(View.GONE);
             if (mListener != null) {
                 mListener.onPermissionSuccess();
             }
         } else {
-//            isShowDialog(new OnShowRequestPermissionRationaleListener() {
-//                @Override
-//                public void selectUnShowDialog() {
-//                    tipLayout.setVisibility(View.VISIBLE);
-//                }
-//
-//                @Override
-//                public void unSelect() {
-//                    tipLayout.setVisibility(View.GONE);
-//                    mListener.onCancelClick();
-//                }
-//            }, unGetPermissions);
+
             //如果授权失败，把弹窗显示出来让用户手动设置授权
             tipLayout.setVisibility(View.VISIBLE);
         }
@@ -210,22 +196,15 @@ public class PermissionDialogActivity extends AppCompatActivity {
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void isShowDialog(OnShowRequestPermissionRationaleListener listener, String... permissions) {
-        for (String permission : permissions) {
-            if (!shouldShowRequestPermissionRationale(permission)) {
-                listener.selectUnShowDialog();
-            } else {
-                listener.unSelect();
-            }
 
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         RequestPermission.isStartActivity = false;
+        if(mListener != null){
+            mListener = null;
+        }
     }
 
     @Override

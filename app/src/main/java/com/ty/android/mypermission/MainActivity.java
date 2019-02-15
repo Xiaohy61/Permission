@@ -1,6 +1,7 @@
 package com.ty.android.mypermission;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.Toast;
 
 import com.skyward.android.permission.OnPermissionListener;
 import com.skyward.android.permission.RequestPermission;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @author skyward、Enlogty
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestPermission.request(MainActivity.this, new OnPermissionListener() {
+                RequestPermission.request(new WeakReference<Context>(MainActivity.this), new OnPermissionListener() {
                     @Override
                     public void onPermissionSuccess() {
                         Toast.makeText(MainActivity.this, "取得权限", Toast.LENGTH_SHORT).show();
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestPermission.request(MainActivity.this, new OnPermissionListener() {
+                RequestPermission.request(new WeakReference<Context>(MainActivity.this), new OnPermissionListener() {
                     @Override
                     public void onPermissionSuccess() {
                         Toast.makeText(MainActivity.this,"取得权限",Toast.LENGTH_SHORT).show();
