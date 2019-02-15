@@ -20,7 +20,7 @@ allprojects {
 ```
 ``` xml
  dependencies {
-	        implementation 'com.github.Xiaohy61:Permission:1.2'
+	        implementation 'com.github.Xiaohy61:Permission:1.3'
 	}
 
 ```
@@ -70,44 +70,46 @@ allprojects {
 ```xml
 public class RequestPermission {
 
-    public static boolean  isStartActivity;
-
-    public static void request(@NonNull Context context, @NonNull OnPermissionListener listener, @NonNull String... permissions) {
+    static boolean isStartActivity;
 
 
-        if (hasPermission(context, permissions)) {
-            listener.onPermissionSuccess();
-
-        } else {
-
-            if(!isStartActivity){
-                Intent intent = new Intent(context,PermissionDialogActivity.class);
-                intent.putExtra("permissions", permissions);
-                PermissionDialogActivity.onPermissionListener(listener);
-                context.startActivity(intent);
-                isStartActivity = true;
-            }
+       public static void request(@NonNull WeakReference<Context> context, @NonNull OnPermissionListener listener, @NonNull String... permissions) {
 
 
-        }
+           if (hasPermission(context, permissions)) {
+               listener.onPermissionSuccess();
 
-    }
+           } else {
+               //在PermissionDialogActivity没有销毁之前，避免多次创建PermissionDialogActivity
+               if (!isStartActivity) {
+                   Intent intent = new Intent(context.get(), PermissionDialogActivity.class);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   intent.putExtra("permissions", permissions);
+                   PermissionDialogActivity.onPermissionListener(listener);
+                   context.get().startActivity(intent);
+                   isStartActivity = true;
+               }
 
-    /**
-     * 是否拥有了申请的权限
-     *
-     * @param context
-     * @param permissions
-     * @return
-     */
-    public static boolean hasPermission(Context context, String... permissions) {
-        for (String permission : permissions) {
-            if (PermissionChecker.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
+
+           }
+
+       }
+
+       /**
+        * 是否拥有了申请的权限
+        *
+        * @param context  context
+        * @param permissions 申请的权限
+        * @return bool
+        */
+       static boolean hasPermission(WeakReference<Context> context, String... permissions) {
+           for (String permission : permissions) {
+               if (PermissionChecker.checkSelfPermission(context.get(), permission) != PackageManager.PERMISSION_GRANTED) {
+                   return false;
+               }
+           }
+           return true;
+       }
 
 }
 
